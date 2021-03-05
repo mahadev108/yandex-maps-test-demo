@@ -98,6 +98,7 @@ extension MapView {
         let sessionUUID = UUID()
         let drivingRouter = YMKDirections.sharedInstance().createDrivingRouter()
         let session = drivingRouter.requestRoutes(with: requestPoints, drivingOptions: drivingOptions, vehicleOptions: YMKDrivingVehicleOptions()) { [weak self] routes, error in
+            self?.drivingSessions[sessionUUID] = nil
             if error != nil {
                 print("ERROR loading routes!")
                 return
@@ -105,9 +106,8 @@ extension MapView {
             if let route = routes?.first {
                 self?.mapWindow.map.mapObjects.addPolyline(with: route.geometry)
             } else {
-                print("Empty route")
+                print("Empty routes")
             }
-            self?.drivingSessions[sessionUUID] = nil
         }
         drivingSessions[sessionUUID] = session
     }
